@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{52D05F87-736D-463E-9E5A-A9313F7D9E0B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6FB7CDE0-7CE6-4D3B-A97E-3991FBFAC538}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "UriTester", "src\UriTester\UriTester.xproj", "{8B5B91DF-8465-4C38-A963-D7B0C4510BAE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8B5B91DF-8465-4C38-A963-D7B0C4510BAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B5B91DF-8465-4C38-A963-D7B0C4510BAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B5B91DF-8465-4C38-A963-D7B0C4510BAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B5B91DF-8465-4C38-A963-D7B0C4510BAE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8B5B91DF-8465-4C38-A963-D7B0C4510BAE} = {52D05F87-736D-463E-9E5A-A9313F7D9E0B}
+	EndGlobalSection
+EndGlobal
