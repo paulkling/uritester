@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using StatsdClient;
+using FluentScheduler;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace UriTester
 {
@@ -21,8 +23,6 @@ namespace UriTester
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
-
-           
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -48,6 +48,9 @@ namespace UriTester
                 StatsdServerName = Environment.GetEnvironmentVariable("STATSDSERVER"),
                 Prefix = Environment.GetEnvironmentVariable("STATSDPREFIX")
             });
+
+            JobManager.Initialize(new MyRegistry(app.ApplicationServices.GetService<IMemoryCache>()));
+
         }
     }
 }

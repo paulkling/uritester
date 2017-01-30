@@ -30,9 +30,7 @@ namespace UriTester.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            List<Server> servers = ReadData.ReadDataAndConstructServers();
-            _cache.Set(CacheKeys.Data, servers);
-
+           
             return new string[] { "value1", "value1" };
         }
 
