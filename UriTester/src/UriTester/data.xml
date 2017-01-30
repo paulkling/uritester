@@ -1,7 +1,7 @@
 ﻿<Servers>
-  <!--<Server Name="G1" Site="google.com" lookfor="google1" Frequency="15" Debounce="25" />
+  <Server Name="G1" Site="google.com" lookfor="google1" Frequency="15" Debounce="25" />
   <Server Name="G2" Site="http://google.com" Lookfor="google" />
   <Server Name="G3" Site="http://google.com"  />
-  <Server Name="G4" Site="google.com" Lookfor="google" Frequency="1" Debounce="25" /> -->
+  <Server Name="G4" Site="google.com" Lookfor="google" Frequency="1" Debounce="25" /> 
   <Server Name="Auth" Site="https://node1-qe00us-auth.pmdomhq.protomold.com/health" />
 </Servers>

@@ -40,6 +40,7 @@ namespace UriTester.Controllers
         [HttpGet("{id}")]
         public string Get(int id)
         {
+            /*
             List<Server> servers = new List<Server>();
             if (!_cache.TryGetValue(CacheKeys.Data, out servers))
             {
@@ -54,9 +55,13 @@ namespace UriTester.Controllers
                 Console.WriteLine("Name:\t" + server.Name + "message: " + check2.Result.Message + " status: " + check2.Result.Status);
                 Console.WriteLine("----------------------------------");
             }
-            Metrics.Set("something-special", "3");
+            Metrics.Set("something-special", "25");
+            Metrics.GaugeAbsoluteValue("something-special", 50);
+            */
+            Metrics.Counter("something-special",10,1);
 
-            return "value=" + check2.Result.Message + "\r\n" + check2.Result.Status;
+            //return "value=" + check2.Result.Message + "\r\n" + check2.Result.Status;
+            return "ddfs";
         }
 
      
