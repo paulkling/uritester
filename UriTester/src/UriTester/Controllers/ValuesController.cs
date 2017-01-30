@@ -13,6 +13,7 @@ using System.Dynamic;
 using System.Reflection;
 using System.Text;
 using System.Net;
+using StatsdClient;
 
 namespace UriTester.Controllers
 {
@@ -53,6 +54,8 @@ namespace UriTester.Controllers
                 Console.WriteLine("Name:\t" + server.Name + "message: " + check2.Result.Message + " status: " + check2.Result.Status);
                 Console.WriteLine("----------------------------------");
             }
+            Metrics.Set("something-special", "3");
+
             return "value=" + check2.Result.Message + "\r\n" + check2.Result.Status;
         }
 
@@ -75,13 +78,5 @@ namespace UriTester.Controllers
         public void Delete(int id)
         {
         }
-
-
-         private string xml = @"<Servers>
-                 <Server Name=""100"" Site=""google.com"" />
-                 <Server Name=""sdasdasdas"">
-                     <Mark>80</Mark>
-                 </Server>
-             </Servers>";
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using StatsdClient;
 
 namespace UriTester
 {
@@ -20,6 +21,8 @@ namespace UriTester
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
+
+           
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -39,6 +42,12 @@ namespace UriTester
             loggerFactory.AddDebug();
 
             app.UseMvc();
+
+            Metrics.Configure(new MetricsConfig
+            {
+                StatsdServerName = Environment.GetEnvironmentVariable("STATSDSERVER"),
+                Prefix = Environment.GetEnvironmentVariable("STATSDPREFIX")
+            });
         }
     }
 }
