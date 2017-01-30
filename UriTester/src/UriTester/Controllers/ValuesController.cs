@@ -12,6 +12,7 @@ using System.Xml.Linq;
 using System.Dynamic;
 using System.Reflection;
 using System.Text;
+using System.Net;
 
 namespace UriTester.Controllers
 {
@@ -28,24 +29,8 @@ namespace UriTester.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-
-            String value; 
-            if (!_cache.TryGetValue(CacheKeys.Data, out value))
-            {
-
-                ProcessStartInfo psi = new ProcessStartInfo();
-                psi.FileName = "powershell";
-                psi.UseShellExecute = false;
-                psi.RedirectStandardOutput = true;
-
-                psi.Arguments = "Get-Host";
-                Process p = Process.Start(psi);
-                string strOutput = p.StandardOutput.ReadToEnd();
-                p.WaitForExit();
-                Console.WriteLine(strOutput);
-
-                _cache.Set(CacheKeys.Data, strOutput);
-            }
+            List<Server> servers = ReadData.ReadDataAndConstructServers();
+            _cache.Set(CacheKeys.Data, servers);
 
             return new string[] { "value1", "value1" };
         }
@@ -54,74 +39,21 @@ namespace UriTester.Controllers
         [HttpGet("{id}")]
         public string Get(int id)
         {
-            String value;
-            if (!_cache.TryGetValue(CacheKeys.Data, out value))
+            List<Server> servers = new List<Server>();
+            if (!_cache.TryGetValue(CacheKeys.Data, out servers))
             {
+                servers = ReadData.ReadDataAndConstructServers();
             }
 
-            var check1 = "https://node1-qe00us-auth.pmdomhq.protomold.com";
-            var check2 = "http://node1-produs-taxapi.webservices.protolabs.com";
-            var check3 = "google.com";
-
-
-            var check = UriChecker.CheckSite(check1, true);
-            //var check = UriChecker.CheckSite(check2, true);
-            //var check = UriChecker.CheckSite(check3);
-            //var check = UriChecker.CheckSite(check3,"paul");
-            Task.WaitAll(check);
-            var respose = check.Result;
-
-
-
-
-
-
-
-
-            
-         
-            // load into XElement
-            XElement doc = XElement.Load("data.xml");
-
-            // using our ToDynamicList (Extenion Method)
-            var servers = doc.ToDynamicList();
-
-            // loop through each person
-            String serversText = "\r\n";
-            foreach (dynamic server in servers)
+            Task<UriCheckerResponse> check2 = null;
+            foreach (Server server in servers)
             {
-                serversText += server.Name +":";
-                serversText += server.Site + ":";
-
-                if (((IDictionary<string, object>)server).ContainsKey("Lookfor"))
-                {
-                    serversText += server.Lookfor + ":";
-                }
-
-
-                if (((IDictionary<string, object>)server).ContainsKey("Frequency"))
-                {
-                    serversText += server.Frequency + ":";
-                }
-
-                if (((IDictionary<string, object>)server).ContainsKey("Debounce"))
-                {
-                    serversText += server.Debounce;
-                }
-
-                serversText += "\r\n";
-
-                Console.WriteLine("Name:\t" + server.Name);
+                check2 = UriChecker.CheckSite(server);
+                Task.WaitAll(check2);
+                Console.WriteLine("Name:\t" + server.Name + "message: " + check2.Result.Message + " status: " + check2.Result.Status);
                 Console.WriteLine("----------------------------------");
             }
-
-
-
-
-
-
-
-                return "value="+ value + respose.Message + "\r\n"+ respose.Status + serversText;
+            return "value=" + check2.Result.Message + "\r\n" + check2.Result.Status;
         }
 
      

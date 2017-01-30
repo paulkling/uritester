@@ -12,6 +12,12 @@ namespace UriTester
     {
         private static String MetricsDotNetSearch = "\"IsHealthy\":true,";
 
+
+        public static async Task<UriCheckerResponse> CheckSite(Server server)
+        {
+            return await CheckSite(server.Uri, server.MetricsDotNetEndpoint, server.TextToSearchFor);
+        }
+
         public static async Task<UriCheckerResponse> CheckSite(String uri)
         {
             return await CheckSite(uri, false, null);
@@ -40,40 +46,48 @@ namespace UriTester
                 }
             }
             UriCheckerResponse returnValue = new UriCheckerResponse();
-            using (var client = new HttpClient())
+            try
             {
-                client.BaseAddress = new Uri(uriToCheck);
-                client.DefaultRequestHeaders.Accept.Clear();
-                var response = await client.GetAsync(uriToCheck);
-                if (MetricsDotNet)
+                using (var client = new HttpClient())
                 {
-                    var responseString = await response.Content.ReadAsStringAsync();
-                    returnValue = UriChecker.parseOutput(MetricsDotNetSearch, uriToCheck, responseString);
-                    if (returnValue.Status != Server.Status.Ok)
+                    client.BaseAddress = new Uri(uriToCheck);
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    var response = await client.GetAsync(uriToCheck);
+                    if (MetricsDotNet)
                     {
-                        var message = responseString.Replace("\\r\\n", String.Empty);
-                        returnValue.Message = "Metrics.Net endpoint Uri: " + uriToCheck + "' return \r\n'" + message;
+                        var responseString = await response.Content.ReadAsStringAsync();
+                        returnValue = UriChecker.parseOutput(MetricsDotNetSearch, uriToCheck, responseString);
+                        if (returnValue.Status != Server.Status.Ok)
+                        {
+                            var message = responseString.Replace("\\r\\n", String.Empty);
+                            returnValue.Message = "Metrics.Net endpoint Uri: " + uriToCheck + "' return \r\n'" + message;
+                        }
+                    }
+                    else if ((parseOutput != null) && (parseOutput.Length > 0))
+                    {
+                        var responseString = await response.Content.ReadAsStringAsync();
+                        returnValue = UriChecker.parseOutput(parseOutput, uriToCheck, responseString);
+
+                    }
+                    //Just checking 200 
+                    else if (response.IsSuccessStatusCode)
+                    {
+                        returnValue.Status = Server.Status.Ok;
+                        returnValue.Message = "";
+                    }
+                    else
+                    {
+                        //ohh ohh error
+                        var code = response.StatusCode;
+                        returnValue.Status = Server.Status.Error;
+                        returnValue.Message = "Error server returned: " + code;
                     }
                 }
-                else if ((parseOutput != null) && (parseOutput.Length > 0))
-                {
-                    var responseString = await response.Content.ReadAsStringAsync();
-                    returnValue = UriChecker.parseOutput(parseOutput, uriToCheck, responseString);
-
-                }
-                //Just checking 200 
-                else if (response.IsSuccessStatusCode)
-                {
-                    returnValue.Status = Server.Status.Ok;
-                    returnValue.Message = "";
-                }
-                else
-                {
-                    //ohh ohh error
-                    var code = response.StatusCode;
-                    returnValue.Status = Server.Status.Error;
-                    returnValue.Message = "Error server returned: " + code;
-                } 
+            }
+            catch (HttpRequestException e)
+            {
+                returnValue.Message = e.Message;
+                returnValue.Status = Server.Status.Error;
             }
             return returnValue;
         }

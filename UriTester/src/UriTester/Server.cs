@@ -23,6 +23,8 @@ namespace UriTester
 
         public string TextToSearchFor { get; set; }
 
+        public bool MetricsDotNetEndpoint { get; set; }
+
         public int FrequencyToCheck { get; set; }
 
         public int Debounce { get; set; }
