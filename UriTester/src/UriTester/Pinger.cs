@@ -28,7 +28,7 @@ namespace UriTester
                 _cache.Set(key.Name, key);
             }
             Task<UriCheckerResponse> response = UriChecker.CheckSite(server);
-            Task.WaitAll(response);
+           Task.WaitAll(response);
 
             server.LastResultDate = DateTime.Now;
 

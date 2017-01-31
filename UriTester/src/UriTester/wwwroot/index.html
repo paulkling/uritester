@@ -1,0 +1,50 @@
+﻿<html ng-app="app">
+<head>
+    <meta charset="utf-8">
+    <title>Angular.js JSON Fetching Example</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+    <script>
+      var countryApp = angular.module('app', []);
+      countryApp.controller('DataCtrl', function ($scope, $http, $timeout){
+
+          $scope.getData = function () {
+              $http.get('/api/servers').success(function (data) {
+                  $scope.servers = data;
+              });
+          };
+
+        $scope.intervalFunction = function () {
+            $timeout(function () {
+                $scope.getData();
+                $scope.intervalFunction();
+            }, 2500)
+        };
+
+        $scope.intervalFunction();
+      });
+    </script>
+</head>
+<body ng-controller="DataCtrl">
+    <h2>Servers</h2>
+    <a href="/api/servers">Json</a>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Result</th>
+            <th>Date</th>
+            <th>URI</th>
+            
+        </tr>
+        <tr ng-repeat="server in servers | orderBy: 'name' ">
+            <td>{{server.name}}</td>
+            <td>{{server.healthCheck}}</td>
+            <td>{{server.lastResult}}</td>
+            <td>{{server.lastResultDate}}</td>
+            <td>{{server.uri}}</td>
+            
+        </tr>
+    </table>
+</body>
+</html>
