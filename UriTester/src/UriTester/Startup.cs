@@ -42,6 +42,7 @@ namespace UriTester
             loggerFactory.AddDebug();
 
             app.UseMvc();
+            app.UseStaticFiles();
 
             Metrics.Configure(new MetricsConfig
             {

@@ -35,5 +35,7 @@ namespace UriTester
         public int Attempts { get; set; }
 
         public String LastResult { get; set; }
+
+        public DateTime LastResultDate { get; set; }
     }
 }

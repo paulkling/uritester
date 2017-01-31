@@ -1,20 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 using Microsoft.Extensions.Caching.Memory;
-using System.IO;
-using System.Xml.Linq;
-using System.Dynamic;
-using System.Reflection;
-using System.Text;
-using System.Net;
-using StatsdClient;
-using Newtonsoft.Json;
 
 namespace UriTester.Controllers
 {
