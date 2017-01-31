@@ -8,12 +8,12 @@
       var countryApp = angular.module('app', []);
       countryApp.controller('DataCtrl', function ($scope, $http, $timeout){
 
-          $scope.getData = function () {
-              $http.get('/api/servers').success(function (data) {
-                  $scope.servers = data;
-              });
-          };
-
+        $scope.getData = function () {
+            $http.get('/api/servers').success(function (data) {
+                $scope.servers = data;
+            });
+        };
+        $scope.getData();
         $scope.intervalFunction = function () {
             $timeout(function () {
                 $scope.getData();
