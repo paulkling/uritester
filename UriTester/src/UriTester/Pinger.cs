@@ -27,44 +27,47 @@ namespace UriTester
                 //Console.WriteLine("Missing server= " + key.Name);
                 _cache.Set(key.Name, key);
             }
-            Task<UriCheckerResponse> response = UriChecker.CheckSite(server);
-           Task.WaitAll(response);
 
-            server.LastResultDate = DateTime.Now;
+            if (server != null)
+            {
+                Task<UriCheckerResponse> response = UriChecker.CheckSite(server);
+                Task.WaitAll(response);
 
-            if (response.Result.Status == Server.Status.Ok)
-            {
-                server.HealthCheck = response.Result.Status;
-                server.Attempts = 1;
-                server.LastResult = "";
-               
-                _cache.Set(key.Name, server);
-            }
-            //if not Ok must fill in message
-            else
-            {
-                int attempts = server.Attempts;
-                if (server.Debounce > 1)
+                server.LastResultDate = DateTime.Now;
+
+                if (response.Result.Status == Server.Status.Ok)
                 {
-                    if (attempts < server.Debounce)
+                    server.HealthCheck = response.Result.Status;
+                    server.Attempts = 1;
+                    server.LastResult = "";
+
+                    _cache.Set(key.Name, server);
+                }
+                //if not Ok must fill in message
+                else
+                {
+                    int attempts = server.Attempts;
+                    if (server.Debounce > 1)
                     {
-                        server.Attempts = attempts + 1;
+                        if (attempts < server.Debounce)
+                        {
+                            server.Attempts = attempts + 1;
+                        }
+                        else
+                        {
+                            server.HealthCheck = response.Result.Status;
+                            server.LastResult = response.Result.Message;
+                        }
                     }
                     else
                     {
                         server.HealthCheck = response.Result.Status;
+                        server.Attempts = 1;
                         server.LastResult = response.Result.Message;
+                        _cache.Set(key.Name, server);
                     }
                 }
-                else
-                {
-                    server.HealthCheck = response.Result.Status;
-                    server.Attempts = 1;
-                    server.LastResult = response.Result.Message;
-                    _cache.Set(key.Name, server);
-                }
             }
-            
         }
     }
 }
