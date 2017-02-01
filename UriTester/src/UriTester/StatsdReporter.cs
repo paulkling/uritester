@@ -9,7 +9,7 @@ namespace UriTester
 {
     public class StatsdReporter
     {
-        private static String PRE = "asdas.sdas.asddas.sad.";
+        private static String PRE = ".";
         private IMemoryCache _cache;
         public StatsdReporter(IMemoryCache cache)
         {

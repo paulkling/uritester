@@ -48,7 +48,7 @@ namespace UriTester
             Metrics.Configure(new MetricsConfig
             {
                 StatsdServerName = Environment.GetEnvironmentVariable("STATSDSERVER"),
-                Prefix = Environment.GetEnvironmentVariable("STATSDPREFIX")
+                Prefix = "test2.uritester"
             });
 
             JobManager.Initialize(new MyRegistry(app.ApplicationServices.GetService<IMemoryCache>()));

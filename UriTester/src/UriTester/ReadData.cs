@@ -63,6 +63,15 @@ namespace UriTester
                 {
                     tempServer.Debounce = 1;
                 }
+
+                if (((IDictionary<string, object>)server).ContainsKey("MetricDotNet"))
+                { 
+                    tempServer.MetricsDotNetEndpoint = true;
+                }
+                else
+                {
+                    tempServer.MetricsDotNetEndpoint = false;
+                }
                 returnValue.Add(tempServer);
             }
 
