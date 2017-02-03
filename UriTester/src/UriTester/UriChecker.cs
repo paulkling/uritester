@@ -48,6 +48,8 @@ namespace UriTester
             UriCheckerResponse returnValue = new UriCheckerResponse();
             try
             {
+            
+
                 using (var client = new HttpClient())
                 {
                     client.BaseAddress = new Uri(uriToCheck);
