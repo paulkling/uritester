@@ -1,32 +1,32 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Caching.Memory;
+
 
 namespace UriTester
 {
     public class Pinger 
     {
   
-        private IMemoryCache _cache;   
-        private Server key;
+  
+        private Server server;
 
 
-        public Pinger(IMemoryCache cache, Server key)
+        public Pinger(Server key)
         {
-            _cache = cache;
-            this.key = key;   
+ 
+            this.server = key;   
         }
         
 
         public void Execute()
         {
             // Do work!
-            Server server;
-            if (!_cache.TryGetValue(key.Name, out server))
-            {
+            //Server server;
+            ///if (!Data.server.TryGetValue(key.Name, out server))
+            //{
                 //Console.WriteLine("Missing server= " + key.Name);
-                _cache.Set(key.Name, key);
-            }
+            //    Data.server[key.Name] = key;
+            //}
 
             if (server != null)
             {
@@ -41,7 +41,8 @@ namespace UriTester
                     server.Attempts = 1;
                     server.LastResult = "";
 
-                    _cache.Set(key.Name, server);
+                    Data.server[server.Name] = server;
+                    
                 }
                 //if not Ok must fill in message
                 else
@@ -64,7 +65,8 @@ namespace UriTester
                         server.HealthCheck = response.Result.Status;
                         server.Attempts = 1;
                         server.LastResult = response.Result.Message;
-                        _cache.Set(key.Name, server);
+
+                        Data.server[server.Name] = server;
                     }
                 }
             }

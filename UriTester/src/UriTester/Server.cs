@@ -30,7 +30,7 @@ namespace UriTester
         public int Debounce { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
-        public Server.Status HealthCheck { get; set; }
+        public Server.Status HealthCheck { get; set; } = Server.Status.Degraded;
 
         public int Attempts { get; set; }
 

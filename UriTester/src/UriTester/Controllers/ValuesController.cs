@@ -2,18 +2,17 @@
 
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
+
 
 namespace UriTester.Controllers
 {
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
-        private IMemoryCache _cache;
-
-        public ValuesController (IMemoryCache memoryCache)
+        
+        public ValuesController ()
         {
-            _cache = memoryCache;
+
         }
         // GET api/values
         [HttpGet]

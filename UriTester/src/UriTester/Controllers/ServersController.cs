@@ -3,40 +3,34 @@ using System.Collections.Generic;
 
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
+
 
 namespace UriTester.Controllers
 {
     [Route("api/[controller]")]
     public class ServersController : Controller
     {
-        private IMemoryCache _cache;
-
-        public ServersController (IMemoryCache memoryCache)
+       
+        public ServersController ()
         {
-            _cache = memoryCache;
+            
         }
 
         // GET api/values
         [HttpGet]
         public JsonResult Get()
         {
-            List<Server> servers = new List<Server>();
-            if (_cache.TryGetValue(CacheKeys.Data, out servers))
+            List<Server> returnList = new List<Server>();
+            foreach (Server serv in Data.servers)
             {
-                List<Server> returnList = new List<Server>();
-                foreach (Server serv in servers)
+                Server s = Data.server[serv.Name];
+                if (s != null)
                 {
-                    Server addToList;
-                    if (_cache.TryGetValue(serv.Name, out addToList))
-                    {
-                        returnList.Add(addToList);
-                    }
+                    returnList.Add(s);
                 }
-                return Json(returnList);
             }
             //this will be empty is cache miss and that is ok
-            return Json(servers);
+            return Json(returnList);
         }
 
         // GET api/values/5
@@ -44,10 +38,12 @@ namespace UriTester.Controllers
         public JsonResult Get(String  id)
         {
             Server server = new Server();
-            if (!_cache.TryGetValue(id, out server))
+            foreach (Server serv in Data.servers)
             {
-                List<Server> list = new List<Server>();
-                return Json(list);
+                if (serv.Name == id)
+                {
+                    return Json(serv);
+                }
             }
             return Json(server);
         }

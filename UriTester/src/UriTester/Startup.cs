@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using StatsdClient;
 using FluentScheduler;
-using Microsoft.Extensions.Caching.Memory;
+
 
 namespace UriTester
 {
@@ -51,7 +51,7 @@ namespace UriTester
                 Prefix = "test2.uritester"
             });
 
-            JobManager.Initialize(new MyRegistry(app.ApplicationServices.GetService<IMemoryCache>()));
+            JobManager.Initialize(new MyRegistry());
 
         }
     }
